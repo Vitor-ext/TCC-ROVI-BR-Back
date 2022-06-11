@@ -4,8 +4,10 @@ const fs = require('fs');
 
 const app = express();
 const router = express.Router();
+const { body, validationResult } = require('express-validator'); 
+const request = require('request');
 
-
+ 
 const TB_USUARIO = require('../model/Usuario');
 
 /***** MULTER - STORAGE *****/
@@ -45,26 +47,45 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
+
+router.post('/login', async  (req, res)=>{
+    
+    const {email, senha} = req.body;
+    console.log(email);
+    const user=  await TB_USUARIO.findOne({
+        where:{email:email} 
+    });
+    if(user){
+        if((senha, user.senha)) {
+            res.send('USUARIO LOGADO COM SUCESSO!');
+            return;
+        }
+      
+    }
+
+    res.status(401).send({message:'Email ou senha incorretos! '});
+  
+});
+
+
+
 router.post('/Usuario/cadastrarUsuario', (req, res)=>{
 
-
-    const { nome, CPF, telefone, email, celular, endereco} = req.body;
-
-    TB_USUARIO.create(
+    console.log(req.body); 
+    const { nome, CPF, email, senha, senhaConf} = req.body; 
+    TB_USUARIO.create( 
         {
-            nome,
-            CPF,
+            nome, 
+            CPF, 
             email,
-            telefone,
             senha,
             senhaConf
-        }
+        } 
     ).then(
         ()=>{
             res.send('DADOS INSERIDOS COM SUCESSO!');      
         }
     );
-
 });
 
 router.get('/Usuario/listarUsuario', (req, res)=>{

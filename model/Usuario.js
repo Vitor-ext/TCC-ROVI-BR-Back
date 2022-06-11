@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 /*Importação da conexão com o banco de dados*/
 const connection = require('../database/database');
 
-const TB_USUARIO = connection.define(
+const TB_USUARIO = connection.define( 
     'tbl_usuario',
     {
         nome:{

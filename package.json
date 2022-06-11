@@ -23,12 +23,16 @@
   },
   "homepage": "git@github.com:Vitor-ext/TCC-ROVI-BR-Back.git#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.3",
+    "express-validator": "^6.14.1",
     "firebase": "^9.7.0",
     "fs": "^0.0.1-security",
     "multer": "^1.4.4",
     "mysql2": "^2.3.3",
     "nodemon": "^2.0.15",
+    "request": "^2.88.2",
     "sequelize": "^6.18.0"
   }
 }

@@ -40,5 +40,5 @@ app.use('/', ProcessoController);
 
 /*Servidor de requisições da aplicação */
 app.listen(3000, ()=>{
-    console.log('Servidor Rodando na Porta 3000 - URL: http://Localhost3000');
+    console.log('Servidor Rodando na Porta 3000 - URL: http://Localhost:3000/');
 }); 
