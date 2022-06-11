@@ -5,7 +5,8 @@ const fs = require('fs');
 const app = express();
 const router = express.Router();
 
-const Usuario = require('../model/Usuario');
+
+const TB_USUARIO = require('../model/Usuario');
 
 /***** MULTER - STORAGE *****/
 /** GERENCIA O ARMAZENAMENTO DOS ARQUIVOS **/
@@ -44,27 +45,19 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-router.post('/TB_Usuario/cadastrarTB_Usuario', upload.array('files', 2) ,(req, res)=>{
+router.post('/Usuario/cadastrarUsuario', (req, res)=>{
 
-    console.log(req.files[0]);
-    console.log(req.files[1]);
-    console.log(req.body);
 
-    const { nome, CPF, cnh, telefone, email, celular, endereco} = req.body;
-    const foto = req.files[0].path;
-    const foto_cnh = req.files[1].path;
-    // console.log(cnh, foto)   Teste de envio das Imagens
+    const { nome, CPF, telefone, email, celular, endereco} = req.body;
+
     TB_USUARIO.create(
         {
             nome,
             CPF,
-            cnh,
-            telefone,
-            foto,
-            foto_cnh,
             email,
-            endereco,
-            celular
+            telefone,
+            senha,
+            senhaConf
         }
     ).then(
         ()=>{
@@ -179,8 +172,7 @@ router.put('/TB_Usuario/editarTB_Usuario', upload.array('files', 2), (req, res)=
                 foto,
                 telefone,
                 email,
-                celular,
-                tblEspecialidadeId},
+                celular},
                 {where: {id}}
              ).then(
                  ()=>{

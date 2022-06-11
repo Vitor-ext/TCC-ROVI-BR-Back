@@ -11,11 +11,12 @@ app.use(express.urlencoded({extended:true}));
 const connection = require('./database/database')
 
 /*Importação das models*/
-const Usuario = require('./model/Usuario');
+const TB_USUARIO = require('./model/Usuario');
 const Veiculo = require('./model/Veiculo');
 const Pagamento = require('./model/Pagamento');
 const Cartao = require('./model/Cartao');
-
+const Rota = require('./model/Rota');
+const Processo = require('./model/Processo');
 
 /*Importação das rotas*/
 const veiculoController = require('./controller/VeiculoController');
@@ -29,6 +30,12 @@ app.use('/', pagamentoController);
 
 const cartaoController = require('./controller/Cartaocontroller');
 app.use('/', cartaoController);
+
+const RotaController = require('./controller/Rotacontroller');
+app.use('/', RotaController);
+
+const ProcessoController = require('./controller/Processocontroller');
+app.use('/', ProcessoController);
 
 
 /*Servidor de requisições da aplicação */
