@@ -56,7 +56,7 @@ router.post('/login', async  (req, res)=>{
         where:{email:email} 
     });
     if(user){
-        if((senha, user.senha)) {
+        if((senha, user.senha)) {    //incluir um compare
             res.send('USUARIO LOGADO COM SUCESSO!');
             return;
         }
@@ -73,20 +73,27 @@ router.post('/Usuario/cadastrarUsuario', (req, res)=>{
 
     console.log(req.body); 
     const { nome, CPF, email, senha, senhaConf} = req.body; 
-    TB_USUARIO.create( 
-        {
-            nome, 
-            CPF, 
-            email,
-            senha,
-            senhaConf
-        } 
-    ).then(
-        ()=>{
-            res.send('DADOS INSERIDOS COM SUCESSO!');      
-        }
-    );
+    
+    if (senha===senhaConf){
+        TB_USUARIO.create( 
+            {
+                nome, 
+                CPF, 
+                email,
+                senha
+            } 
+        ).then(
+            ()=>{
+                res.send('DADOS INSERIDOS COM SUCESSO!');      
+            }
+        );
+    }else {
+        res.send('As Senhas devem Iguais!'); 
+    }
+
 });
+
+
 
 router.get('/Usuario/listarUsuario', (req, res)=>{
 

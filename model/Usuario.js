@@ -22,10 +22,6 @@ const TB_USUARIO = connection.define(
         senha:{
             type: Sequelize.STRING,
             allowNull: false
-        },
-        senhaConf:{
-            type: Sequelize.STRING,
-            allowNull: false
         }
     }
 );
