@@ -1,23 +1,40 @@
 const express = require('express');
 
-const Veiculo = require('../model/Veiculo');
+const VEICULO = require('../model/Veiculo');
+const TB_USUARIO = require('../model/Usuario');
 
 /** CONFIGURAÇÃO DAS ROTAS **/
 const router = express.Router();
 
 router.post(
     '/veiculo/cadastrarVeiculo',
-    (req, res)=>{
-       
-        
-        let { nome_veiculo } = req.body;
+    async (req, res)=>{
 
-        TB_VEICULO.create(
-            {nome_Veiculo,
-             placa_Veiculo,
-             chassi_Veiculo,
-             modelo_Veiculo,
-             marca_Veiculo
+        const {
+            nome_veiculo, 
+            placa_veiculo,
+            chassi_veiculo,
+            modelo_veiculo,
+            marca_veiculo,
+            CPF
+        } = req.body; 
+
+
+    const user=  await TB_USUARIO.findOne({
+        where:{CPF:CPF} 
+    });
+    if(user){
+        const tblUsuarioId = user.id;   
+        
+        console.log(req.body);  //teste
+
+        VEICULO.create(
+            {nome_veiculo,
+             placa_veiculo,
+             chassi_veiculo,
+             modelo_veiculo,
+             marca_veiculo,
+             tblUsuarioId,
             }
         ).then(
             ()=>{
@@ -25,8 +42,11 @@ router.post(
             }
         );
 
+    }else{
+        res.send('CPF Inválido !'); 
+        console.log('CPF Inválido !');
     }
-);
+});
 
 /* ROTA DE LISTAGEM GERAL DE CATEGORIA (VERBO HTTP: GET)*/
 router.get(
@@ -45,7 +65,7 @@ router.get(
 router.get( '/Veiculo/listarVeiculo/:id', (req, res)=>{
 
     let {id} = req.params;
-    TB_VEICULO.findByPk(id)
+    VEICULO.findByPk(id)
              .then(
                  (Veiculo)=>{
                     res.send(Veiculo);
@@ -62,7 +82,7 @@ router.put(
     
         let {id, nome_Veiculo, placa_Veiculo, chassi_Veiculo, modelo_Veiculo, marca_Veiculo} = req.body;
 
-        TB_VEICULO.update(
+        VEICULO.update(
                 {nome_Veiculo},
                 {placa_Veiculo},
                 {chassi_Veiculo},
@@ -84,7 +104,7 @@ router.delete(
 
         let {id} = req.body;
 
-        TB_VEICULO.destroy(
+        VEICULO.destroy(
             {where: {id}}
         ).then(
 

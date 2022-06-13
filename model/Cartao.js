@@ -28,7 +28,7 @@ const Cartao = connection.define(
             type: Sequelize.STRING,
             allowNull: false
         },
-        vaidade:{
+        validade:{
             type: Sequelize.STRING,
             allowNull: false
         },

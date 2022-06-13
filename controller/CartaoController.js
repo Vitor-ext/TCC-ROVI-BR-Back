@@ -6,6 +6,7 @@ const app = express();
 const router = express.Router();
 
 const Cartao = require('../model/Cartao');
+const TB_USUARIO = require('../model/Usuario');
 
 /***** MULTER - STORAGE *****/
 /** GERENCIA O ARMAZENAMENTO DOS ARQUIVOS **/
@@ -44,34 +45,51 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-router.post('/TB_Cartao/cadastrarTB_Cartao', upload.array('files', 1) ,(req, res)=>{
+router.post('/Cartao/cadastrarCartao',  async (req, res)=>{
 
-    console.log(req.files[0]);
     console.log(req.body);
 
-    const { numero, titular, CPF, CVV, validade, apelido} = req.body;
-    const foto = req.files[0].path;
-
-    TB_CARTAO.create(
-        {
-            numero,
-            titular,
-            CPF,
-            CVV,
-            validade,
+        const { 
+            numero, 
+            titular, 
+            CPF, 
+            CVV, 
+            validade, 
             apelido
-        }
-    ).then(
-        ()=>{
-            res.send('DADOS INSERIDOS COM SUCESSO!');      
-        }
-    );
+        } = req.body;
+
+    const user=  await TB_USUARIO.findOne({
+        where:{CPF:CPF} 
+    });
+    if(user){
+        const tblUsuarioId = user.id;
+
+        Cartao.create(
+            {
+                numero,
+                titular,
+                CPF,
+                CVV,
+                validade,
+                apelido,
+                tblUsuarioId
+            }
+        ).then(
+            ()=>{
+                res.send('DADOS INSERIDOS COM SUCESSO!');      
+            }
+        );
+
+    }else{
+        res.send('CPF Inválido !'); 
+        console.log('CPF Inválido !');
+    }
 
 });
 
 router.get('/Cartao/listarCartao', (req, res)=>{
 
-    TB_CARTAO.findAll()
+    CARTAO.findAll()
           .then((Cartao)=>{
               res.send(Cartao)
           });
@@ -81,7 +99,7 @@ router.get('/Cartao/listarCartaoCodigo/:id', (req, res)=>{
 
     const { id } = req.params
 
-    TB_CARTAO.findByPk(id)
+    CARTAO.findByPk(id)
           .then((ID_Cartao)=>{
               res.send(ID_Cartao)
           });
@@ -91,12 +109,12 @@ router.delete('/Cartao/excluirCartao/:id', (req, res)=>{
 
     const { id } = req.params;
 
-    TB_CARTAO.findByPk(id)
+    CARTAO.findByPk(id)
          .then((Cartao)=>{
 
             const foto = Cartao.foto;
 
-            TB_CARTAO.destroy({
+            CARTAO.destroy({
                 where:{id}
             }).then(
                 ()=>{
@@ -120,14 +138,14 @@ router.delete('/Cartao/excluirCartao/:id', (req, res)=>{
 
 });
 
-router.put('/TB_Cartao/editarTB_Cartao', upload.array('files', 1), (req, res)=>{
+router.put('/Cartao/editarCartao', upload.array('files', 1), (req, res)=>{
 
     const {numero, titular, CPF, CVV, validade, apelido, id } =req.body;
 
     /**UPFDATE COM IMAGEM */
     if(req.files != ''){
 
-        TB_CARTAO.findByPk(id)
+        CARTAO.findByPk(id)
         .then((Cartao)=>{
 
             let foto = Cartao.foto;
@@ -144,8 +162,8 @@ router.put('/TB_Cartao/editarTB_Cartao', upload.array('files', 1), (req, res)=>{
 
             foto = req.files[0].path;
 
-            /**ATUALIZAÇÃO DOS DADOS DO TB_CARTAO */
-            TB_CARTAO.update(
+            /**ATUALIZAÇÃO DOS DADOS DO CARTAO */
+            CARTAO.update(
                 {numero, 
                 titular,
                 CPF,
@@ -164,7 +182,7 @@ router.put('/TB_Cartao/editarTB_Cartao', upload.array('files', 1), (req, res)=>{
     }else{
 
             /**UPFDATE SEM IMAGEM */
-    TB_CARTAO.update(
+    CARTAO.update(
         {numero, 
         titular,
         CPF,
