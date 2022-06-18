@@ -52,7 +52,7 @@ router.post(
 router.get(
     '/Veiculo/listarVeiculo',
     (req, res)=>{
-        TB_VEICULO.findAll()
+        VEICULO.findAll()
                  .then(
                      (Veiculos)=>{
                         res.send(Veiculos);
@@ -60,6 +60,21 @@ router.get(
                  );
     }
 );
+
+/* ROTA DE LISTAGEM GERAL DE CATEGORIA (VERBO HTTP: GET)*/
+router.get(
+    '/Veiculo/listarVeiculoUser',
+    (req, res)=>{
+        VEICULO.findAll()
+                 .then(
+                     (Veiculos)=>{
+                        const id = user.id;
+                        res.send(Veiculos);
+                     }
+                 );
+    }
+);
+
 
 /* ROTA DE LISTAGEM POR ID DE CATEGORIA (VERBO HTTP: GET)*/
 router.get( '/Veiculo/listarVeiculo/:id', (req, res)=>{

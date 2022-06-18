@@ -2,6 +2,8 @@ const express = require('express');
 
 const Processo = require('../model/Processo');
 
+
+
 /** CONFIGURAÇÃO DAS PROCESSOS **/
 const router = express.Router();
 
@@ -9,14 +11,13 @@ router.post(
     '/Processo/cadastrarProcesso',
     (req, res)=>{
        
-        
         let { Processo } = req.body;
 
         TB_PROCESSO.create(
             {carga_identificada,
              carga_atual,
              carga_consumida,
-             tempo_previsto
+             tblUsuarioId       // Pedir Ajuda Adriano 
             }
         ).then(
             ()=>{

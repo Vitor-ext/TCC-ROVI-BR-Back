@@ -4,6 +4,9 @@ const Sequelize = require('sequelize');
 /*Importação da conexão com o banco de dados*/
 const connection = require('../database/database');
 
+/*Importação da tabela de categoria para criação da chave estrangeira
+representanto a cardinalidade*/
+const Usuario = require('./Usuario');
 
 const Processo = connection.define(
     'tbl_processo',
@@ -20,15 +23,19 @@ const Processo = connection.define(
         carga_consumida:{
             type: Sequelize.STRING,
             allowNull: false
-        },
-
-        tempo_previsto:{
-            type: Sequelize.CHAR,
-            allowNull: false
         }
     }
 );
 
+
+/*Implementação da  CHAVE ESTRANGEIRA - LADO N*/
+
+Usuario.hasMany(Processo);
+
+
+/*Implementação da  CHAVE PRIMÁRIA - LADO 1*/
+
+Processo.belongsTo(Usuario);
 
 /*Executar a criação da tabela no Banco de Dados*/
 //Processo.sync({force:true}); // Cria tabela no banco de dados ROVI_BR
